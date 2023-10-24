@@ -6,7 +6,8 @@ import java.io.*;
 import java.util.*;
 
 public class ConnectFourGame {
-    public static void playConnectFour(String player1Name, String player2Name) {
+    public static void playConnectFour(String player1Name,
+       String player2Name) {
         int rows = 7;
         int columns = 7;
         Board board = new Board(rows, columns);
@@ -18,9 +19,9 @@ public class ConnectFourGame {
 
         Player currentPlayer = player1;
         boolean gameWon = false;
-
         while (!board.isFull() && !gameWon) {
-            System.out.println(currentPlayer.getName() + ", choose a column (0-6): ");
+            System.out.println(currentPlayer.getName() +
+                ", choose a column (0-6): ");
             int column = getPlayerMove();
 
             if (board.isValidMove(column)) {
@@ -30,7 +31,8 @@ public class ConnectFourGame {
                 if (gameWon) {
                     System.out.println(currentPlayer.getName() + " wins!");
                 } else {
-                    currentPlayer = (currentPlayer == player1) ? player2 : player1;
+                    currentPlayer = (currentPlayer == player1) ?
+                     player2 : player1;
                 }
             } else {
                 System.out.println("Invalid move. Try again.");
