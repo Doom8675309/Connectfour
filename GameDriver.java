@@ -1,5 +1,5 @@
 /******************************************************************************
-* Written by: Tyler Moroni                                                    *
+* Written by: Tyler Moroni, George Gherardi                                   *
 * Code for group project                                                      *
 ******************************************************************************/
 import java.io.*;
@@ -17,8 +17,9 @@ public class GameDriver {
         do {
         // Asks what game would like to be played
             System.out.println("Select a game to play:");
-            System.out.println("1. Connect Four");
-            System.out.println("2. Another Game (To Be Implemented)");
+            System.out.println("1. Connect Four (by Tyler)");
+            System.out.println("2. Reversi (by George)");
+            System.out.println("3. Another Game (To Be Implemented)");
 
             choice = scanner.nextInt();
        // Choices for games go here
@@ -27,7 +28,10 @@ public class GameDriver {
                     playConnectFour();
                     break;
                 case 2:
-                    System.out.println("Sorry, the second game is not" +
+                    playReversi();
+                    break;
+                case 3:
+                    System.out.println("Sorry, the third game is not" +
                         " implemented yet.");
                     break;
                 default:
@@ -42,7 +46,7 @@ public class GameDriver {
 
         System.out.println("Thanks for playing at the Game Center!");
     }
-       // Code for game 1 
+       // Code for game 1 (written by Tyler)
     public static void playConnectFour() {
         Scanner scanner;
         String player1Name, player2Name;
@@ -66,5 +70,30 @@ public class GameDriver {
     public static String getPlayerName(Scanner scanner, String playerLabel) {
         System.out.print(playerLabel + ", enter your name: ");
         return scanner.next();
+    }
+    
+    // Code for game 2 (Reversi) Written by George
+    public static void playReversi() {
+        ReversiGame game = new ReversiGame();
+        Scanner scanner = new Scanner(System.in);
+
+        while (!game.isGameOver()) {
+            game.printBoard();
+            System.out.println("Current Player: " + game.currentPlayer);
+
+            System.out.print("Enter your move (row column, e.g., 1 2): ");
+            int row = scanner.nextInt() - 1;
+            int col = scanner.nextInt() - 1;
+
+            game.makeMove(row, col);
+        }
+
+        game.printBoard();
+        char winner = game.getWinner();
+        if (winner == ' ') {
+            System.out.println("It's a tie!");
+        } else {
+            System.out.println("Player " + winner + " wins!");
+        }
     }
 }
