@@ -12,12 +12,16 @@ import java.util.*;
 
 public class ReversiGame {
     private char[][] board;  // Array for the game board with X and O players
-    public char currentPlayer;  // Keeps track of the current player
+    public Player currentPlayer;  // Keeps track of the current player.
+    public Player player1;
+    public Player player2;
 
     // Sets up board with starting pieces
-    public ReversiGame() {
+    public ReversiGame(String player1Name, String player2Name) {
+        player1 = new Player(player1Name, 'X');
+        player2 = new Player(player2Name, 'O');
         board = new char[8][8];
-        currentPlayer = 'X';
+        currentPlayer = player1;
 
         // This is where it actually places blanks & the starting pieces
         for (int i = 0; i < 8; i++) {
@@ -65,12 +69,12 @@ public class ReversiGame {
             int currentRow = targetRow + rowOffsets[direction];
             int currentCol = targetCol + colOffsets[direction];
             while (currentRow >= 0 && currentRow < 8 && currentCol >= 0 && 
-            currentCol < 8 && board[currentRow][currentCol] == getOpponent()) {
+            currentCol < 8 && board[currentRow][currentCol] == getOpponentSymbol()) {
                 currentRow = currentRow + rowOffsets[direction];
                 currentCol = currentCol + colOffsets[direction];
                 if (currentRow >= 0 && currentRow < 8 && currentCol >= 0 && 
                 currentCol < 8 && board[currentRow][currentCol]
-                == currentPlayer) {
+                == currentPlayer.getSymbol()) {
                     return true;
                     // If we find our own piece in this direction,
                     // the move is valid
@@ -88,7 +92,7 @@ public class ReversiGame {
             return;
         }
 
-        board[targetRow][targetCol] = currentPlayer;
+        board[targetRow][targetCol] = currentPlayer.getSymbol();
         
         // same thing I described before, this is the relationship between 
         // the current piece and pieces around it.
@@ -103,18 +107,18 @@ public class ReversiGame {
             int currentCol = targetCol + colOffsets[direction];
             if (currentRow >= 0 && currentRow < 8 && currentCol >= 0 &&
             currentCol < 8 && board[currentRow][currentCol] ==
-            getOpponent()) {
+            getOpponentSymbol()) {
                 while (currentRow >= 0 && currentRow < 8 && currentCol
                 >= 0 && currentCol < 8) {
                     if (board[currentRow][currentCol] == '.') {
                         break;
                     }
-                    if (board[currentRow][currentCol] == currentPlayer) {
+                    if (board[currentRow][currentCol] == currentPlayer.getSymbol()) {
                         currentRow = currentRow - rowOffsets[direction];
                         currentCol = currentCol - colOffsets[direction];
                         while (currentRow != targetRow || currentCol != 
                         targetCol) {
-                            board[currentRow][currentCol] = currentPlayer;
+                            board[currentRow][currentCol] = currentPlayer.getSymbol();
                             currentRow = currentRow - rowOffsets[direction];
                             currentCol = currentCol - colOffsets[direction];
                         }
@@ -129,16 +133,28 @@ public class ReversiGame {
         currentPlayer = getOpponent();
     }
 
-    // Returns the opponent's player symbol
-    public char getOpponent() {
-        char opponent;
-        if (currentPlayer == 'X')
-            opponent = 'O';
+    // Returns the opponent
+    public Player getOpponent() {
+        Player opponent;
+        if (currentPlayer == player1)
+            opponent = player2;
         else
-            opponent = 'X';
+            opponent = player1;
 
         return opponent;
     }
+    
+    // Returns the opponent's symbol
+    public char getOpponentSymbol() {
+        Player opponent;
+        if (currentPlayer == player1)
+            opponent = player2;
+        else
+            opponent = player1;
+
+        return opponent.getSymbol();
+    }
+
 
     // Checks if the game is over (no valid moves for either player)
     public boolean isGameOver() {
@@ -156,7 +172,7 @@ public class ReversiGame {
     }
 
     // Determines the winner based on the number of pieces on the board
-    public char getWinner() {
+    public char getWinner() { 
         int countX = 0, countO = 0;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {

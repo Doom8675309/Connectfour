@@ -74,12 +74,18 @@ public class GameDriver {
     
     // Code for game 2 (Reversi) Written by George
     public static void playReversi() {
-        ReversiGame game = new ReversiGame();
         Scanner scanner = new Scanner(System.in);
+        String player1, player2;
+
+        System.out.println("Welcome to Reversi!");
+        player1 = getPlayerName(scanner, "Player 1");
+        player2 = getPlayerName(scanner, "Player 2");
+
+        ReversiGame game = new ReversiGame(player1, player2);
 
         while (!game.isGameOver()) {
             game.printBoard();
-            System.out.println("Current Player: " + game.currentPlayer);
+            System.out.println("Current Player: " + game.currentPlayer.getName());
 
             System.out.print("Enter your move (row column, e.g., 1 2): ");
             int row = scanner.nextInt() - 1;
